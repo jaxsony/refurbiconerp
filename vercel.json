@@ -4,6 +4,7 @@
   "buildCommand": "npx prisma generate --schema apps/api/prisma/schema.prisma && npm run build --workspaces --if-present",
   "outputDirectory": "apps/web/dist",
   "framework": null,
+  "regions": ["bom1"],
   "rewrites": [
     { "source": "/api", "destination": "/api/index" },
     { "source": "/api/(.*)", "destination": "/api/index" },
@@ -18,11 +19,11 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 60,
-      "includeFiles": "{apps/api/dist/**,node_modules/.prisma/client/**,node_modules/@prisma/client/**}"
+      "includeFiles": "node_modules/.prisma/client/**"
     },
     "api/[...path].js": {
       "maxDuration": 60,
-      "includeFiles": "{apps/api/dist/**,node_modules/.prisma/client/**,node_modules/@prisma/client/**}"
+      "includeFiles": "node_modules/.prisma/client/**"
     }
   }
 }
