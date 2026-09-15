@@ -13,7 +13,9 @@ function withActive(model: string, where: Record<string, unknown> | undefined) {
 }
 
 export function createPrismaClient() {
-  return new PrismaClient().$extends({
+  return new PrismaClient({
+    log: process.env.VERCEL ? ['error'] : ['error', 'warn'],
+  }).$extends({
     name: 'softDelete',
     query: {
       $allModels: {

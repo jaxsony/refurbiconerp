@@ -5,7 +5,9 @@
   "outputDirectory": "apps/web/dist",
   "framework": null,
   "rewrites": [
-    { "source": "/:path*", "destination": "/index.html" }
+    { "source": "/api", "destination": "/api/index" },
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
@@ -16,11 +18,11 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 60,
-      "includeFiles": "node_modules/.prisma/client/**"
+      "includeFiles": "{apps/api/dist/**,node_modules/.prisma/client/**,node_modules/@prisma/client/**}"
     },
     "api/[...path].js": {
       "maxDuration": 60,
-      "includeFiles": "node_modules/.prisma/client/**"
+      "includeFiles": "{apps/api/dist/**,node_modules/.prisma/client/**,node_modules/@prisma/client/**}"
     }
   }
 }

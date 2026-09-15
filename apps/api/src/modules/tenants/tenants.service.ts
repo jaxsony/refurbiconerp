@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ROLE_TEMPLATES } from '../../common/constants/permissions';
 import { IsDateString, IsInt, IsOptional, IsString, Min } from 'class-validator';
@@ -335,7 +336,6 @@ export class TenantsService {
     await this.provisionOperationsMasters(tx, tenantId, hq.id);
 
     if (owner?.ownerEmail) {
-      const bcrypt = await import('bcrypt');
       const email = owner.ownerEmail.toLowerCase();
       const existing = await tx.user.findUnique({ where: { email } });
       const user =

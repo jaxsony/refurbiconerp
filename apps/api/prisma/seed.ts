@@ -1,5 +1,5 @@
 import { PermissionAction, PrismaClient } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { PERMISSION_CATALOG, ROLE_TEMPLATES } from '../src/common/constants/permissions';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { TenantsService } from '../src/modules/tenants/tenants.service';
