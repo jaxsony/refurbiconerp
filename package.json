@@ -1,0 +1,25 @@
+{
+  "name": "refurbicon-erp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Multi-tenant business operations ERP — web API and back-office",
+  "workspaces": [
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:api": "npm run start:dev -w @refurbicon/api",
+    "dev:web": "npm run dev -w @refurbicon/web",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "prisma:generate": "npm run prisma:generate -w @refurbicon/api",
+    "prisma:migrate": "npm run prisma:migrate -w @refurbicon/api",
+    "prisma:seed": "npm run prisma:seed -w @refurbicon/api",
+    "db:setup": "npm run prisma:push -w @refurbicon/api && npm run prisma:generate -w @refurbicon/api && npm run prisma:seed -w @refurbicon/api"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
