@@ -212,42 +212,39 @@ export class TenantsService {
     const plan = await this.prisma.plan.findUnique({ where: { code: 'starter' } });
     const ownerPassword = dto.ownerPassword ?? 'ChangeMe!Owner1';
 
-    return this.prisma.$transaction(
-      async (tx) => {
-        const tenant = await tx.tenant.create({
-          data: {
-            name: dto.name,
-            slug,
-            legalName: dto.legalName,
-            locale: dto.locale ?? 'en-IN',
-            timezone: dto.timezone ?? 'Asia/Kolkata',
-            currency: dto.currency ?? 'INR',
-            taxRegime: dto.taxRegime ?? 'IN_GST',
-            planId: plan?.id,
-            trialEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-          },
-        });
-        await this.provisionTenant(tx, tenant.id, {
-          ownerEmail: dto.ownerEmail,
-          ownerName: dto.ownerName,
-          ownerPassword,
-        });
-        await tx.auditEvent.create({
-          data: {
-            tenantId: tenant.id,
-            action: 'CREATE',
-            entityType: 'Tenant',
-            entityId: tenant.id,
-            next: { name: dto.name, slug },
-          },
-        });
-        return tx.tenant.findUniqueOrThrow({
-          where: { id: tenant.id },
-          include: { branches: true, departments: true, roles: true, fiscalYears: true },
-        });
-      },
-      { maxWait: 20_000, timeout: 180_000 },
-    );
+    return this.prisma.$transaction(async (tx) => {
+      const tenant = await tx.tenant.create({
+        data: {
+          name: dto.name,
+          slug,
+          legalName: dto.legalName,
+          locale: dto.locale ?? 'en-IN',
+          timezone: dto.timezone ?? 'Asia/Kolkata',
+          currency: dto.currency ?? 'INR',
+          taxRegime: dto.taxRegime ?? 'IN_GST',
+          planId: plan?.id,
+          trialEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+        },
+      });
+      await this.provisionTenant(tx, tenant.id, {
+        ownerEmail: dto.ownerEmail,
+        ownerName: dto.ownerName,
+        ownerPassword,
+      });
+      await tx.auditEvent.create({
+        data: {
+          tenantId: tenant.id,
+          action: 'CREATE',
+          entityType: 'Tenant',
+          entityId: tenant.id,
+          next: { name: dto.name, slug },
+        },
+      });
+      return tx.tenant.findUniqueOrThrow({
+        where: { id: tenant.id },
+        include: { branches: true, departments: true, roles: true, fiscalYears: true },
+      });
+    });
   }
 
   async update(id: string, dto: UpdateTenantDto) {
